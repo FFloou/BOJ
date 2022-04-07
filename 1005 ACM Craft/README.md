@@ -1,5 +1,5 @@
 # 1005 ACM Craft
-+ problem
++ https://www.acmicpc.net/problem/1005
 + 다이나믹 프로그래밍, 그래프 이론, 위상 정렬
 + GoldⅢ
 
