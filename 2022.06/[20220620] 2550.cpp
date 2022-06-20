@@ -11,8 +11,8 @@
 
 */
 #include <iostream>
-#include <vector>
 #include <algorithm>
+#include <vector>
 using namespace std;
 
 int N;
@@ -20,21 +20,25 @@ int l[10001];
 int r[10001];
 int LIS[10001];
 int trace[10001];
+vector<int> answer;
 int idx, t;
-vector<int> v;
 
 
-
-int bs(int s, int e, int num) {
+int lower_bound(int num, int idx) {
+	int s = 0;
+	int e = idx;
 	int mid = 0;
 	while (s < e) {
 		mid = (s + e) / 2;
-		if (num <= LIS[mid]) e = mid;
-		else s = mid + 1;
+		if (LIS[mid] < num) {
+			s = mid + 1;
+		}
+		else { // mid>=num
+			e = mid;
+		}
 	}
-	return s;
+	return e;
 }
-
 int main() {
 	ios::sync_with_stdio(false);
 	cin.tie(NULL);
@@ -50,29 +54,21 @@ int main() {
 	}
 	for (int i = 1; i <= N; i++) {
 		int num = r[l[i]];
-		if (idx == 0 || LIS[idx - 1] < num) {
-			trace[i] = idx;
-			LIS[idx] = num;
-			idx++;
-		}
-		else {
-			int loc = bs(0, idx, num);
-			trace[i] = loc;
-			LIS[loc] = num;
-		}
+		int loc = lower_bound(num, idx);
+		trace[i] = loc;
+		LIS[loc] = num;
+		if (loc == idx) idx++;
 	}
-	cout << idx-- << '\n';
+	cout << idx << '\n';
+	int temp = idx - 1;
 	for (int i = N; i > 0; i--) {
-		if (trace[i] == idx) {
-			v.push_back(l[i]);
-			idx--;
+		if (trace[i] == temp) {
+			answer.push_back(l[i]);
+			temp--;
 		}
 	}
-	sort(v.begin(), v.end());
-	for (int i = 0; i < v.size(); i++) {
-		cout << v[i] << ' ';
+	for (int i = 0; i < idx; i++) {
+		cout << answer[i] << ' ';
 	}
-
-
 	return 0;
 }
